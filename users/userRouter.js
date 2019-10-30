@@ -1,7 +1,11 @@
-const express = 'express';
-
+console.log('=== RUNNING ROUTER ===') // confirming router is running
+/******************************** ROUTER SETUP ********************************/
+const express = require('express');
+// IMPORT USERDB
+// MADE NEED TO IMPORT POSTDB
 const router = express.Router();
 
+/******************************** REQUEST HANDLERS ********************************/
 router.post('/', (req, res) => {
 
 });
