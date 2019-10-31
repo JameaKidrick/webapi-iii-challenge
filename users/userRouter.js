@@ -18,7 +18,9 @@ function validateUserId(req, res, next) {
         next(); // added next() inside else to get rid of response error about sending response to header after client received one already
       }
     })
-  
+    .catch(err => {
+      res.status(500).json({ error: "could not create new post" })
+    })
 };
 
 // Verify user info is there
@@ -27,7 +29,7 @@ function validateUser(req, res, next) {
   if(name === undefined){
     res.status(400).json({ error:"missing user data" })
   }else if(name === ''){
-    res.status(400).json({ error:"missing required name field" }) // ***TEST***
+    res.status(400).json({ error:"missing required name field" })
   }else{
     next();
   }
@@ -50,12 +52,8 @@ router.post('/', validateUser, (req, res) => {
   const name = req.body
   db.get()
     .then(users => {
-      if(users.map(item => { // logic checking for existing user
-        return item.name === name.name ? true : false
-      }).find(item => {
-        return item === true
-      })){
-        res.status(400).json({ error:"a user with that username already exists in the database"})
+      if(users.find(item => item.name === name.name)){
+        res.status(400).json({ error:"a user with that username already exists in the database" })
       }else{
         db.insert(name)
           .then(user => {
@@ -79,9 +77,9 @@ router.post('/:id/posts', [validatePost, validateUserId], (req, res) => {
         .then(newPost => {
           res.status(200).json(newPost)
         })
-        .catch(err => {
-          res.status(500).json({ error: "could not create new post" })
-        })
+    })
+    .catch(err => {
+      res.status(500).json({ error: "could not create new post" })
     })
 });
 
