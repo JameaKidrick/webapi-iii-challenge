@@ -22,6 +22,7 @@ server.use(logger);
 server.use(morgan('dev'));
 
 server.use('/api/posts', postRouter)
+server.use('/api/users', userRouter)
 
 server.get('/', (req, res) => { // ADD LOGGER
   res.send(`<h2>Let's write some Middleware!</h2>`)
